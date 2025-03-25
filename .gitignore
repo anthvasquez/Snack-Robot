@@ -1,4 +1,6 @@
 devel/
+install/
+log/
 logs/
 build/
 bin/
@@ -43,9 +45,3 @@ qtcreator-*
 /planning/src
 
 *~
-
-# Emacs
-.#*
-
-# Catkin custom files
-CATKIN_IGNORE

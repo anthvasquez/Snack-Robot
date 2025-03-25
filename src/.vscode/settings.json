@@ -1,0 +1,14 @@
+{
+    "python.autoComplete.extraPaths": [
+        "/root/ros_ws/install/robot_model_export_description/lib/python3.10/site-packages",
+        "/opt/ros/humble/lib/python3.10/site-packages",
+        "/opt/ros/humble/local/lib/python3.10/dist-packages",
+        "/usr/local/python/current/lib/python3.13/site-packages/"
+    ],
+    "python.analysis.extraPaths": [
+        "/root/ros_ws/install/robot_model_export_description/lib/python3.10/site-packages",
+        "/opt/ros/humble/lib/python3.10/site-packages",
+        "/opt/ros/humble/local/lib/python3.10/dist-packages",
+        "/usr/local/python/current/lib/python3.13/site-packages/"
+    ]
+}
