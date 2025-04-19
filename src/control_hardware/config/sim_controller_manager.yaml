@@ -13,20 +13,17 @@ controller_manager:
 
 diff_drive_controller:
   ros__parameters:
-    left_wheel_names: ["Left_Wheel_Actuator"]
-    right_wheel_names: ["Right_Wheel_Actuator"]
+    left_wheel_names: ["Revolute_Left_Wheel"]
+    right_wheel_names: ["Revolute_Right_Wheel"]
     wheel_separation: 0.173
-    wheel_radius: 0.0475
+    wheel_radius: 0.095
     right_wheel_radius_multiplier: -1.0  # give opposite direction commands to right motor
     base_frame_id: "base_link"
     pose_covariance_diagonal: [0.001, 0.001, 0.001, 0.001, 0.001, 0.01]
     twist_covariance_diagonal: [0.001, 0.001, 0.001, 0.001, 0.001, 0.01]
     position_feedback: false
-    linear.x.has_velocity_limits: true
-    linear.x.max_velocity: 0.9326603190344698676685972544111 # Max forward velocity in m/s
-    # (max_pulse_freq / pulse_per_rev) = revs_per_second
-    # revs_per_second * 2*pi*wheel_radius = max_forward_velocity
-
+    linear.x.max_velocity: 10.0 # Max forward velocity in m/s
+  
 imu_sensor_broadcaster:
   ros__parameters:
     sensor_name: "BNO08X"

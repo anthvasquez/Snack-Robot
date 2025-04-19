@@ -20,7 +20,7 @@
   <gazebo>
     <plugin filename="libgazebo_ros2_control.so" name="gazebo_ros2_control">
       <robot_sim_type>gazebo_ros2_control/GazeboSystem</robot_sim_type>
-      <parameters>$(find control_hardware)/config/controller_manager.yaml</parameters>
+      <parameters>$(find control_hardware)/config/sim_controller_manager.yaml</parameters>
     </plugin>
   </gazebo>
 

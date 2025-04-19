@@ -6,12 +6,73 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
 endif()
 
 # find dependencies
-find_package(ament_cmake REQUIRED)
-find_package(rclcpp REQUIRED)
-find_package(rclcpp_lifecycle REQUIRED)
-find_package(ros2_control REQUIRED)
-find_package(pluginlib REQUIRED)
-find_package(hardware_interface REQUIRED)
+set(DEPENDENCIES
+  ament_cmake
+  rclcpp
+  rclcpp_lifecycle
+  ros2_control
+  pluginlib
+  hardware_interface
+  lifecycle_msgs
+  sensor_msgs
+)
+
+foreach(Dependency IN ITEMS ${DEPENDENCIES})
+  find_package(${Dependency} REQUIRED)
+endforeach()
+
+add_library(
+  sh2
+  SHARED
+  src/sh2/sh2.c
+  src/sh2/euler.c
+  src/sh2/sh2_SensorValue.c
+  src/sh2/sh2_util.c
+  src/sh2/shtp.c
+)
+target_include_directories(sh2 PUBLIC
+$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/sh2>
+$<INSTALL_INTERFACE:include/sh2>
+)
+
+add_library(
+  BNO08X_IMU
+  SHARED
+  src/control_hardware/BNO08X_RVC_SensorHardware.cpp
+)
+target_compile_features(BNO08X_IMU PUBLIC cxx_std_17)
+target_include_directories(BNO08X_IMU PUBLIC
+$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
+$<INSTALL_INTERFACE:include/control_hardware>
+)
+target_link_libraries(BNO08X_IMU PUBLIC -llgpio sh2)
+ament_target_dependencies(
+  BNO08X_IMU PUBLIC
+  ${DEPENDENCIES}
+)
+
+add_library(
+  DM542_Stepper
+  SHARED
+  src/control_hardware/DM542_Stepper_ActuatorHardware.cpp
+)
+target_compile_features(DM542_Stepper PUBLIC cxx_std_17)
+target_include_directories(DM542_Stepper PUBLIC
+$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
+$<INSTALL_INTERFACE:include/control_hardware>
+)
+target_link_libraries(DM542_Stepper PUBLIC -llgpio)
+ament_target_dependencies(
+  DM542_Stepper PUBLIC
+  ${DEPENDENCIES}
+)
+
+install(TARGETS
+  BNO08X_IMU
+  DM542_Stepper
+  DESTINATION lib/${PROJECT_NAME}
+)
+
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
@@ -25,7 +86,7 @@ if(BUILD_TESTING)
   ament_lint_auto_find_test_dependencies()
 endif()
 
-# pluginlib_export_plugin_description_file(hardware_interface dynamixel_hardware.xml)
+pluginlib_export_plugin_description_file(hardware_interface control_hardware.xml)
 
 install(DIRECTORY
 	launch

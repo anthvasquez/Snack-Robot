@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<robot name="snack_robot" xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <ros2_control name="IMU" type="sensor" rw_rate="100">
+    <hardware>
+      <plugin>control_hardware/BNO08x_RVC_SensorHardware</plugin>
+    </hardware>
+    <sensor name="imu_link">
+        <state_interface name="orientation.x" />
+        <state_interface name="orientation.y" />
+        <state_interface name="orientation.z" />
+        <state_interface name="orientation.w" />
+        <state_interface name="angular_velocity.x" />
+        <state_interface name="angular_velocity.y" />
+        <state_interface name="angular_velocity.z" />
+        <state_interface name="linear_acceleration.x" />
+        <state_interface name="linear_acceleration.y" />
+        <state_interface name="linear_acceleration.z" />
+    </sensor>
+  </ros2_control>
+
+  <ros2_control name="LeftStepper" type="actuator" rw_rate="50">
+    <hardware>
+      <plugin>control_hardware/DM542_Stepper_ActuatorHardware</plugin>
+      <param name="pul_pin">12</param>
+      <param name="en_pin">27</param>
+      <param name="dir_pin">22</param>
+      <param name="pulse_per_rev">1600</param>
+    </hardware>
+    <joint name="Left_Wheel_Actuator">
+      <state_interface name="position" />
+      <state_interface name="velocity" />
+      <command_interface name="velocity" />
+    </joint>
+  </ros2_control>
+
+  <ros2_control name="RightStepper" type="actuator" rw_rate="50">
+    <hardware>
+      <plugin>control_hardware/DM542_Stepper_ActuatorHardware</plugin>
+      <param name="pul_pin">13</param>
+      <param name="en_pin">5</param>
+      <param name="dir_pin">6</param>
+      <param name="pulse_per_rev">1600</param>
+    </hardware>
+    <joint name="Right_Wheel_Actuator">
+      <state_interface name="position" />
+      <state_interface name="velocity" />
+      <command_interface name="velocity" />
+    </joint>
+  </ros2_control>
+
+    <!-- Gazebo's ros2_control plugin -->
+  <gazebo>
+    <plugin filename="libign_ros2_control-system.so" name="ign_ros2_control::IgnitionROS2ControlPlugin">
+      <parameters>$(find control_hardware)/config/controller_manager.yaml</parameters>
+    </plugin>
+  </gazebo>
+
+</robot>

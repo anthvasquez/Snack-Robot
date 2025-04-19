@@ -9,7 +9,7 @@ import xacro
 import os
 
 def generate_launch_description():
-    xacro_filepath = os.path.join(get_package_share_directory('control_hardware'), 'urdf', 'ros2_control.xacro')
+    xacro_filepath = os.path.join(get_package_share_directory('control_hardware'), 'urdf', 'classic_ros2_control.xacro')
     robot_description = xacro.process_file(xacro_filepath).toxml()
 
     # Launch Gazebo

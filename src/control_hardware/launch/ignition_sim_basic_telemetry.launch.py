@@ -9,7 +9,7 @@ import xacro
 import os
 
 def generate_launch_description():
-    xacro_filepath = os.path.join(get_package_share_directory('control_hardware'), 'urdf', 'ignition_ros2_control.xacro')
+    xacro_filepath = os.path.join(get_package_share_directory('control_hardware'), 'urdf', 'sim_snack_robot.xacro')
     robot_description = xacro.process_file(xacro_filepath).toxml()
 
     use_sim_time = LaunchConfiguration('use_sim_time', default=True)
@@ -41,7 +41,7 @@ def generate_launch_description():
         package='controller_manager',
         executable='spawner',
         output='screen',
-        arguments=['joint_state_broadcaster']
+        arguments=['joint_state_broadcaster', '--switch-timeout', '10.0']
     )
 
     diff_drive_controller = Node(

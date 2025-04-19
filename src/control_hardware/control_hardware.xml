@@ -1,0 +1,17 @@
+<library path="control_hardware">
+    <class name="control_hardware/BNO08X_RVC_SensorHardware"
+            type="control_hardware::BNO08X_RVC_SensorHardware"
+            base_class_type="hardware_interface::SensorInterface">
+        <description>
+        The BNO08x IMU sensor interface.
+        </description>
+    </class>
+    <class name="control_hardware/DM542_Stepper_ActuatorHardware"
+            type="control_hardware::DM542_Stepper_ActuatorHardware"
+            base_class_type="hardware_interface::ActuatorInterface">
+        <description>
+        The DM542 stepper motor driver actuator interface.
+        </description>
+    </class>
+</library>
+  
