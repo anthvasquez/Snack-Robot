@@ -26,6 +26,7 @@ def generate_launch_description():
             'controller_manager.yaml'
         ]
     )
+    # controller_yaml = os.path.join(get_package_share_directory('control_hardware'), 'config', 'controller_manager.yaml')
 
     return LaunchDescription([
         gui_declaration,
@@ -33,13 +34,16 @@ def generate_launch_description():
             package='robot_state_publisher',
             executable='robot_state_publisher',
             output='screen',
-            parameters=[{'robot_description': robot_description}]
+            parameters=[{'robot_description': robot_description, 'use_sim_time': False}]
         ),
         Node(
             package='controller_manager',
             executable='ros2_control_node',
             output='screen',
-            parameters=[controller_yaml]
+            parameters=[controller_yaml],
+            remappings=[
+            ("~/robot_description", "/robot_description")
+            ],
         ),
         Node(
             package='controller_manager',
@@ -48,7 +52,7 @@ def generate_launch_description():
             arguments=[
                 'joint_state_broadcaster',
                 #'diff_drive_controller',
-                'imu_sensor_broadcaster'
+                #'imu_sensor_broadcaster'
                 ]
         ),
         Node(

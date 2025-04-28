@@ -8,7 +8,7 @@
 using namespace std;
 using namespace hardware_interface;
 
-static const rclcpp::Logger logger = logger;
+static const rclcpp::Logger logger = rclcpp::get_logger("Stepper_Motor");
 const double wheel_radius = 0.095;
 const double wheel_circumference = 2 * M_PI * wheel_radius;
 
@@ -78,7 +78,7 @@ namespace control_hardware
             return CallbackReturn::ERROR;
         }
 
-        if (StateInterfaceExists(states, HW_IF_POSITION) || StateInterfaceExists(states, HW_IF_VELOCITY))
+        if (!StateInterfaceExists(states, HW_IF_POSITION) || !StateInterfaceExists(states, HW_IF_VELOCITY))
         {
             RCLCPP_FATAL(logger, "joint %s must specify one position state and one velocity state.", joint.name.c_str());
             return CallbackReturn::ERROR;

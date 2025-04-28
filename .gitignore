@@ -47,4 +47,4 @@ qtcreator-*
 *~
 
 # My stuff
-.vscode/
+**/.vscode

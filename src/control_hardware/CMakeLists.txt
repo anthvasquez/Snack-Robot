@@ -37,6 +37,7 @@ $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/sh2>
 $<INSTALL_INTERFACE:include/sh2>
 )
 
+# The name of this library must be the same as the <library> tag in control_hardware.xml
 add_library(
   BNO08X_IMU
   SHARED

@@ -13,7 +13,7 @@ using namespace hardware_interface;
 
 namespace control_hardware
 {
-  static const rclcpp::Logger logger = logger;
+  static const rclcpp::Logger logger = rclcpp::get_logger("BNO08X_IMU");
   const char SERIAL_DEVICE[20] = "/dev/serial0";
   char buffer[200];
   const int READING_SIZE = 19;
@@ -22,6 +22,11 @@ namespace control_hardware
 
   hardware_interface::CallbackReturn BNO08X_RVC_SensorHardware::on_init(const hardware_interface::HardwareInfo &info)
   {
+    if(SensorInterface::on_init(info) != CallbackReturn::SUCCESS)
+    {
+      return CallbackReturn::ERROR;
+    }
+
     if (info_.sensors.size() != 1)
     {
       RCLCPP_ERROR(logger, "Expected exactly 1 sensor but %d were found.", (int)info_.sensors.size());
