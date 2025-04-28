@@ -10,6 +10,8 @@ set(DEPENDENCIES
   ament_cmake
   rclcpp
   rclcpp_lifecycle
+  tf2
+  tf2_geometry_msgs
   ros2_control
   pluginlib
   hardware_interface
