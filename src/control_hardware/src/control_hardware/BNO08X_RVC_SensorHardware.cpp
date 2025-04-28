@@ -149,22 +149,22 @@ namespace control_hardware
           ss << hex << uppercase << static_cast<int>(buffer[i]);
         }
         RCLCPP_DEBUG(logger, ss.str().c_str());
-        return return_type::ERROR;
+        return return_type::OK;
       }
 
       auto sequence = reading[0];
       //convert centidegrees to rad
-      auto yaw = (reading[1] + (reading[2] << 8)) * 0.01;
-      auto pitch = (reading[3] + (reading[4] << 8)) * 0.01;
-      auto roll = (reading[5] + (reading[6] << 8)) * 0.01;
+      auto yaw = (int16_t)(reading[1] + (reading[2] << 8)) * 0.01;
+      auto pitch = (int16_t)(reading[3] + (reading[4] << 8)) * 0.01;
+      auto roll = (int16_t)(reading[5] + (reading[6] << 8)) * 0.01;
       tf2::Quaternion orientation;
       orientation.setEuler(roll, pitch, yaw);
       orientation.normalize();
       tf2::convert(orientation, imu.orientation);
       
-      imu.linear_acceleration.x = (reading[7] + (reading[8] << 8)) * 0.01;
-      imu.linear_acceleration.y = (reading[9] + (reading[10] << 8)) * 0.01;
-      imu.linear_acceleration.z = (reading[11] + (reading[12] << 8)) * 0.01;
+      imu.linear_acceleration.x = (int16_t)(reading[7] + (reading[8] << 8)) * 0.01;
+      imu.linear_acceleration.y = (int16_t)(reading[9] + (reading[10] << 8)) * 0.01;
+      imu.linear_acceleration.z = (int16_t)(reading[11] + (reading[12] << 8)) * 0.01;
 
       RCLCPP_DEBUG(logger, "Index: %d", sequence);
       RCLCPP_DEBUG(logger, "Yaw: %.2f, Pitch: %.2f, Roll: %.2f", imu.angular_velocity.z, imu.angular_velocity.y, imu.angular_velocity.x);
