@@ -45,3 +45,6 @@ qtcreator-*
 /planning/src
 
 *~
+
+# My stuff
+.vscode/
