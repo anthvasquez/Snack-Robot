@@ -122,9 +122,7 @@ namespace control_hardware
     auto dataAvailable = lgSerialDataAvailable(uart_fd);
     if (dataAvailable >= READING_SIZE)
     {
-      RCLCPP_INFO(logger, "%d bytes available.", dataAvailable);
-
-      auto bytesRead = dataAvailable >= READING_SIZE * 2 ? lgSerialRead(uart_fd, buffer, min(dataAvailable, (int)sizeof(buffer))) : lgSerialRead(uart_fd, buffer, READING_SIZE);
+      auto bytesRead = dataAvailable >= READING_SIZE * 2 ? lgSerialRead(uart_fd, buffer, READING_SIZE * 2) : lgSerialRead(uart_fd, buffer, READING_SIZE);
       if (bytesRead < READING_SIZE)
       {
         RCLCPP_WARN(logger, "Failed to read all data available (%d)", bytesRead);
@@ -135,7 +133,7 @@ namespace control_hardware
       char *reading = NULL;
       for (int i = bytesRead - READING_SIZE; i >= 0; i--)
       {
-        if (buffer[i] == (int8_t)0xAA && buffer[i + 1] == (int8_t)0xAA)
+        if (buffer[i] == (char)0xAA && buffer[i + 1] == (char)0xAA)
         {
           reading = buffer + i + 2;
           break;
@@ -153,7 +151,6 @@ namespace control_hardware
         RCLCPP_DEBUG(logger, ss.str().c_str());
         return return_type::ERROR;
       }
-      RCLCPP_DEBUG(logger, "Frequency: %f", 1 / (period.seconds()));
 
       auto sequence = reading[0];
       //convert centidegrees to rad

@@ -52,7 +52,7 @@ def generate_launch_description():
             arguments=[
                 'joint_state_broadcaster',
                 #'diff_drive_controller',
-                #'imu_sensor_broadcaster'
+                'imu_sensor_broadcaster'
                 ]
         ),
         Node(

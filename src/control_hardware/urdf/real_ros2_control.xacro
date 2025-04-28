@@ -4,7 +4,7 @@
     <hardware>
       <plugin>control_hardware/BNO08X_RVC_SensorHardware</plugin>
     </hardware>
-    <sensor name="imu_link">
+    <sensor name="BNO08X">
       <state_interface name="orientation.x" />
       <state_interface name="orientation.y" />
       <state_interface name="orientation.z" />
