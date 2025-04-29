@@ -244,9 +244,9 @@ namespace control_hardware
     {
         // cmd_pulse_per_second = cmd_vel / wheel_circumference * pulse_per_rev;
         auto pulse_freq = cmd_pulse_per_second < 0.1f ? 0 : cmd_pulse_per_second;
+        pulse_freq *= cmd_vel < 0 ? -1 : 1;
         state_velocity = (pulse_freq / pulse_per_rev) * wheel_circumference;
-        auto pulses_traveled = static_cast<int>(period.seconds() * pulse_freq);
-        state_position = ((int)state_position + pulses_traveled) % pulse_per_rev;
+        state_position += state_velocity * period.nanoseconds() / pow(10, 9);
 
         return return_type::OK;
     }

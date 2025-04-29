@@ -16,6 +16,7 @@ def generate_launch_description():
     )
     gui = LaunchConfiguration('gui')
 
+    rviz_file = os.path.join(get_package_share_directory('control_hardware'), 'rviz', 'snack_robot_viz.rviz')
     xacro_file = os.path.join(get_package_share_directory('control_hardware'), 'urdf', 'real_snack_robot.xacro')
     robot_description = xacro.process_file(xacro_file).toxml()
 
@@ -59,6 +60,7 @@ def generate_launch_description():
             package='rviz2',
             executable='rviz2',
             output='screen',
+            arguments=['-d', rviz_file],
             condition=IfCondition(gui)
         )
     ])
