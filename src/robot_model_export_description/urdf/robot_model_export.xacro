@@ -184,7 +184,7 @@
   </collision>
 </link>
 
-<link name="IMU_1">
+<link name="imu_link">
   <inertial>
     <origin xyz="0.008109521073689362 2.1464338289019908e-07 0.0010279143883868743" rpy="0 0 0"/>
     <mass value="0.006301396479023865"/>
@@ -501,10 +501,10 @@
   <child link="Right_Wheel_Mirror__1"/>
 </joint>
 
-<joint name="imu_link" type="fixed">
+<joint name="IMU" type="fixed">
   <origin xyz="-0.05822 3.5e-05 0.00813" rpy="0 0 0"/>
   <parent link="base_link"/>
-  <child link="IMU_1"/>
+  <child link="imu_link"/>
 </joint>
 
 <joint name="Rigid 24" type="fixed">

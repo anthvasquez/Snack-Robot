@@ -51,7 +51,7 @@ def generate_launch_description():
             output='screen',
             arguments=[
                 'joint_state_broadcaster',
-                #'diff_drive_controller',
+                'diff_drive_controller',
                 'imu_sensor_broadcaster'
                 ]
         ),

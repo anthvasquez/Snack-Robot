@@ -26,7 +26,7 @@
       <param name="dir_pin">22</param>
       <param name="pulse_per_rev">1600</param>
     </hardware>
-    <joint name="Left_Wheel_Actuator">
+    <joint name="Revolute_Left_Wheel">
       <state_interface name="position" />
       <state_interface name="velocity" />
       <command_interface name="velocity" />
@@ -41,7 +41,7 @@
       <param name="dir_pin">6</param>
       <param name="pulse_per_rev">1600</param>
     </hardware>
-    <joint name="Right_Wheel_Actuator">
+    <joint name="Revolute_Right_Wheel">
       <state_interface name="position" />
       <state_interface name="velocity" />
       <command_interface name="velocity" />

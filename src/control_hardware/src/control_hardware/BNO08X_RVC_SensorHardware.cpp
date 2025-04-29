@@ -17,6 +17,7 @@ namespace control_hardware
   const char SERIAL_DEVICE[20] = "/dev/serial0";
   char buffer[200];
   const int READING_SIZE = 19;
+  const double DEG_TO_RAD = M_PI / 180;
 
 #pragma region Inactive State Transitions
 
@@ -158,7 +159,7 @@ namespace control_hardware
       auto pitch = (int16_t)(reading[3] + (reading[4] << 8)) * 0.01;
       auto roll = (int16_t)(reading[5] + (reading[6] << 8)) * 0.01;
       tf2::Quaternion orientation;
-      orientation.setEuler(roll, pitch, yaw);
+      orientation.setRPY(roll * DEG_TO_RAD, pitch * DEG_TO_RAD, yaw * DEG_TO_RAD);
       orientation.normalize();
       tf2::convert(orientation, imu.orientation);
       

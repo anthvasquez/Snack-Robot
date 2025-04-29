@@ -9,7 +9,7 @@ using namespace std;
 using namespace hardware_interface;
 
 static const rclcpp::Logger logger = rclcpp::get_logger("Stepper_Motor");
-const double wheel_radius = 0.095;
+const double wheel_radius = 0.0475;
 const double wheel_circumference = 2 * M_PI * wheel_radius;
 
 namespace control_hardware
@@ -219,16 +219,21 @@ namespace control_hardware
     return_type DM542_Stepper_ActuatorHardware::write(const rclcpp::Time &time, const rclcpp::Duration &period)
     {
         auto revs_per_second = cmd_vel / wheel_circumference;
-        cmd_pulse_per_second = revs_per_second * pulse_per_rev;
+        cmd_pulse_per_second = abs(revs_per_second * pulse_per_rev);
 
         if(lgGpioWrite(handle, dir_pin, cmd_vel < 0 ? 0 : 1) != 0)
         {
             RCLCPP_ERROR(logger, "Could not write to 'dir_pin' for joint %s", info_.joints[0].name.c_str());
             return return_type::ERROR;
         }
-        if(lgTxPwm(handle, pul_pin, abs(cmd_pulse_per_second), 50, 0, 0) < 0)
+        // The set pwm command only takes in frequency 0.1 <= value <= 10000 Hz
+        // If the commanded value is below that range, set the duty cycle to 0
+        // To prevent the robot from creeping forward when idle
+        auto command_freq = max(0.1f, min(cmd_pulse_per_second, 10000.0f));
+        auto duty = cmd_pulse_per_second < 0.1 ? 0 : 50;
+        if(lgTxPwm(handle, pul_pin, command_freq, duty, 0, 0) < 0)
         {
-            RCLCPP_ERROR(logger, "Failed to create software pwm signal to 'pul_pin' on joint %s", info_.joints[0].name.c_str());
+            RCLCPP_ERROR(logger, "Failed to create software pwm signal for 'pul_pin' (%d) with period (%f) on joint %s", pul_pin, cmd_pulse_per_second, info_.joints[0].name.c_str());
             return return_type::ERROR;
         }
 
@@ -238,8 +243,9 @@ namespace control_hardware
     return_type DM542_Stepper_ActuatorHardware::read(const rclcpp::Time &time, const rclcpp::Duration &period)
     {
         // cmd_pulse_per_second = cmd_vel / wheel_circumference * pulse_per_rev;
-        state_velocity = (cmd_pulse_per_second / pulse_per_rev) * wheel_circumference;
-        auto pulses_traveled = static_cast<int>(period.nanoseconds() * cmd_pulse_per_second / pow(10, 9)) + 1;
+        auto pulse_freq = cmd_pulse_per_second < 0.1f ? 0 : cmd_pulse_per_second;
+        state_velocity = (pulse_freq / pulse_per_rev) * wheel_circumference;
+        auto pulses_traveled = static_cast<int>(period.seconds() * pulse_freq);
         state_position = ((int)state_position + pulses_traveled) % pulse_per_rev;
 
         return return_type::OK;
