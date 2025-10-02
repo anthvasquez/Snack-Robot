@@ -21,7 +21,7 @@
   <ros2_control name="LeftStepper" type="actuator" rw_rate="50">
     <hardware>
       <plugin>control_hardware/DM542_Stepper_ActuatorHardware</plugin>
-      <param name="pul_pin">12</param>
+      <param name="pul_pin">23</param>
       <param name="en_pin">27</param>
       <param name="dir_pin">22</param>
       <param name="pulse_per_rev">1600</param>

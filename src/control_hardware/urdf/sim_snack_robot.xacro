@@ -4,4 +4,5 @@
 
   <xacro:include filename="$(find control_hardware)/urdf/ignition_ros2_control.xacro" />
 
+  <xacro:include filename="$(find control_hardware)/urdf/ign_sensors.xacro" />
 </robot>

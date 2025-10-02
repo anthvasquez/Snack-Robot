@@ -11,6 +11,8 @@ import os
 def generate_launch_description():
     xacro_filepath = os.path.join(get_package_share_directory('control_hardware'), 'urdf', 'sim_snack_robot.xacro')
     robot_description = xacro.process_file(xacro_filepath).toxml()
+    world = os.path.join(get_package_share_directory('my_3d_models'),
+                          'worlds', 'apartment.sdf')
 
     use_sim_time = LaunchConfiguration('use_sim_time', default=True)
 
@@ -23,17 +25,21 @@ def generate_launch_description():
                 'ign_gazebo.launch.py'
             ])
         ]),
-        launch_arguments=[('gz_args', [' -r -v 4 empty.sdf'])]
+        launch_arguments=[('gz_args', world + ' -r')]
     )
 
     # Spawn the robot defined on 'robot_description'
     ignition_spawn_entity = Node(
         package='ros_gz_sim',
         executable='create',
+        name='spawn_robot',
         output='screen',
         arguments=['-topic', 'robot_description',
                    '-name', 'snack_robot',
-                   '-z', '0.1',
+                   '-x', '3',
+                   '-y', '9',
+                   '-z', '0.03',
+                   '-Y', '-1.57',
                    '-allow_renaming', 'true'],
     )
     
@@ -52,6 +58,11 @@ def generate_launch_description():
     )
 
     return LaunchDescription([
+        DeclareLaunchArgument(
+            'use_sim_time',
+            default_value=use_sim_time,
+            description='If true, use simulated clock'
+        ),
         Node(
             package='robot_state_publisher',
             executable='robot_state_publisher',
@@ -62,7 +73,9 @@ def generate_launch_description():
         Node(
             package='ros_gz_bridge',
             executable='parameter_bridge',
-            arguments=['/clock@rosgraph_msgs/msg/Clock[ignition.msgs.Clock'],
+            arguments=['/clock@rosgraph_msgs/msg/Clock[ignition.msgs.Clock',
+                       '/laser@sensor_msgs/msg/LaserScan[ignition.msgs.LaserScan',
+                       '/imu@sensor_msgs/msg/Imu[ignition.msgs.IMU'],
             output='screen'
         ),
         gazebo_node,
@@ -78,10 +91,5 @@ def generate_launch_description():
             target_action=joint_state_broadcaster,
             on_exit=[diff_drive_controller]
             )
-        ),
-        DeclareLaunchArgument(
-            'use_sim_time',
-            default_value=use_sim_time,
-            description='If true, use simulated clock'
         )
     ])

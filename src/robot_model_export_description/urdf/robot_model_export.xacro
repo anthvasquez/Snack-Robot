@@ -50,7 +50,7 @@
   <inertial>
     <origin xyz="3.243495146770803e-08 -0.005407956920820883 3.930996579964291e-05" rpy="0 0 0"/>
     <mass value="0.006547683530071288"/>
-    <inertia ixx="1e-06" iyy="0.0" izz="1e-06" ixy="-0.0" iyz="0.0" ixz="0.0"/>
+    <inertia ixx="1e-06" iyy="1e-06" izz="1e-06" ixy="-0.0" iyz="0.0" ixz="0.0"/>
   </inertial>
   <visual>
     <origin xyz="0.06157 -0.086535 -0.02828" rpy="0 0 0"/>
@@ -146,7 +146,7 @@
   <inertial>
     <origin xyz="3.2434951495463604e-08 0.005408386207586657 3.930996579963597e-05" rpy="0 0 0"/>
     <mass value="0.00654768353007129"/>
-    <inertia ixx="1e-06" iyy="0.0" izz="1e-06" ixy="0.0" iyz="-0.0" ixz="0.0"/>
+    <inertia ixx="1e-06" iyy="1e-06" izz="1e-06" ixy="0.0" iyz="-0.0" ixz="0.0"/>
   </inertial>
   <visual>
     <origin xyz="0.06157 0.086465 -0.02828" rpy="0 0 0"/>
@@ -492,7 +492,7 @@
   <origin xyz="0.0 -0.0235 0.0" rpy="0 0 0"/>
   <parent link="Right_Motor_Mirror___1__1"/>
   <child link="Right_Wheel_Attachment_Mirror__1"/>
-  <axis xyz="-0.0 -1.0 0.0"/>
+  <axis xyz="0.0 -1.0 0.0"/>
 </joint>
 
 <joint name="Rigid 22" type="fixed">

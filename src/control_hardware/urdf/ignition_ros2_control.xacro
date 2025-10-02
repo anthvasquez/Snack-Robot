@@ -7,14 +7,16 @@
     <joint name="Revolute_Left_Wheel">
       <command_interface name="velocity" />
       <state_interface name="velocity" />
+      <state_interface name="position" />
     </joint>
     <joint name="Revolute_Right_Wheel">
       <command_interface name="velocity" />
       <state_interface name="velocity" />
+      <state_interface name="position" />
     </joint>
   </ros2_control>
 
-    <!-- Gazebo's ros2_control plugin -->
+  <!-- Gazebo's ros2_control plugin -->
   <gazebo>
     <plugin filename="libign_ros2_control-system.so" name="ign_ros2_control::IgnitionROS2ControlPlugin">
       <parameters>$(find control_hardware)/config/sim_controller_manager.yaml</parameters>
