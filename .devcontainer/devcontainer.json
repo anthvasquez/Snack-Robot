@@ -10,6 +10,7 @@
     },
 	"remoteUser": "amvas",
 	"runArgs": [
+		"--gpus=all",
 		// "--cap-add=SYS_PTRACE", // Allows the container to trace processes using ptrace system call
 		// "--security-opt=seccomp=unconfined", // Disables seccomp security profiles for the container
 		"--ipc=host", // Shares the host's IPC namespace with the container

@@ -74,7 +74,7 @@ def generate_launch_description():
             package='ros_gz_bridge',
             executable='parameter_bridge',
             arguments=['/clock@rosgraph_msgs/msg/Clock[ignition.msgs.Clock',
-                       '/laser@sensor_msgs/msg/LaserScan[ignition.msgs.LaserScan',
+                       '/scan@sensor_msgs/msg/LaserScan[ignition.msgs.LaserScan',
                        '/imu@sensor_msgs/msg/Imu[ignition.msgs.IMU'],
             output='screen'
         ),
