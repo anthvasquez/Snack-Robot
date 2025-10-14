@@ -1,0 +1,29 @@
+behavior_server:
+  ros__parameters:
+    costmap_topic: local_costmap/costmap_raw
+    footprint_topic: local_costmap/published_footprint
+    global_frame: map
+    local_frame: odom
+    robot_base_frame: base_link
+    transform_timeout: 0.1
+    use_sim_time: true
+    simulate_ahead_time: 2.0
+    max_rotational_vel: 1.0
+    min_rotational_vel: 0.4
+    rotational_acc_lim: 3.2
+    cycle_frequency: 10.0
+    
+    behavior_plugins: ["spin", "backup", "wait", "assisted_teleop"]
+    spin:
+      plugin: "nav2_behaviors/Spin"
+      enable_stamped_cmd_vel: true
+    backup:
+      plugin: "nav2_behaviors/BackUp"
+      enable_stamped_cmd_vel: true
+    wait:
+      plugin: "nav2_behaviors/Wait"
+      enable_stamped_cmd_vel: true
+    assisted_teleop:
+      plugin: nav2_behaviors/AssistedTeleop
+      enable_stamped_cmd_vel: true
+    

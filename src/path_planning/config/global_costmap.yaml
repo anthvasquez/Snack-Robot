@@ -1,0 +1,4 @@
+global_costmap:
+  global_costmap:
+    ros__parameters:
+      robot_radius: 0.16
