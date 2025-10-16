@@ -1,7 +1,7 @@
 FROM ros:humble-ros-base
 
-ARG USERNAME=enfire-lidar
-ARG USER_UID=1001
+ARG USERNAME=amvas
+ARG USER_UID=1000
 ARG USER_GID=$USER_UID
 
 RUN groupadd --gid $USER_GID $USERNAME \
@@ -16,10 +16,10 @@ SHELL [ "/bin/bash" , "-c" ]
 RUN sudo apt update && sudo apt upgrade -y
 
 # Install essential packages
-RUN sudo apt install -y wget
+RUN sudo apt install -y wget less x11-apps liblgpio-dev
 
 # Create overlay workspace
-WORKDIR /root/ros_ws
+WORKDIR /amvas/ros_ws
 
 RUN rosdep install --from-paths src --ignore-src -r -y; \
     source /opt/ros/${ROS_DISTRO}/setup.bash; \
