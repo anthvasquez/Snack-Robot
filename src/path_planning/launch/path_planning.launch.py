@@ -12,6 +12,7 @@ def generate_launch_description():
     recovery_yaml = os.path.join(config_folder, 'recovery.yaml')
     local_costmap_yaml = os.path.join(config_folder, 'local_costmap.yaml')
     global_costmap_yaml = os.path.join(config_folder, 'global_costmap.yaml')
+    behaviors_xml = os.path.join(get_package_share_directory('path_planning'), 'config', 'behavior.xml')
 
     return LaunchDescription([
         Node(
@@ -38,6 +39,7 @@ def generate_launch_description():
             package='twist_stamper',
             executable='twist_stamper',
             output='screen',
+            parameters=[{'frame_id': 'base_link', 'use_sim_time': True}],
             remappings=[
                 ('cmd_vel_in', 'cmd_vel'),
                 ('cmd_vel_out', '/diff_drive_controller/cmd_vel')
@@ -48,7 +50,7 @@ def generate_launch_description():
             executable='bt_navigator',
             name='bt_navigator',
             output='screen',
-            parameters=[bt_navigator_yaml]
+            parameters=[bt_navigator_yaml, {'default_nav_to_pose_bt_xml': behaviors_xml}]
         ),
         Node(
             package='nav2_behaviors',

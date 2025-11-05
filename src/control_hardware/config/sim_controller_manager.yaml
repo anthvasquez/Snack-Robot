@@ -19,6 +19,7 @@ diff_drive_controller:
     wheel_radius: 0.0475
     right_wheel_radius_multiplier: -1.0  # give opposite direction commands to right motor
     base_frame_id: "base_link"
+    enable_odom_tf: false
     pose_covariance_diagonal: [0.001, 0.001, 0.001, 0.001, 0.001, 0.01]
     twist_covariance_diagonal: [0.001, 0.001, 0.001, 0.001, 0.001, 0.01]
     position_feedback: true

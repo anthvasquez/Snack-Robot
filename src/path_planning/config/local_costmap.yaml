@@ -1,6 +1,7 @@
 local_costmap:
   local_costmap:
     ros__parameters:
+      use_sim_time: True
       robot_radius: 0.16
       update_frequency: 5.0
       publish_frequency: 3.0
@@ -34,5 +35,5 @@ local_costmap:
       # inflation layer: adds padding around obstacles but will go near them if it has to
       inflation_layer:
         plugin: "nav2_costmap_2d::InflationLayer"
-        cost_scaling_factor: 3.0
-        inflation_radius: 0.55
+        cost_scaling_factor: 5.0
+        inflation_radius: 0.4
