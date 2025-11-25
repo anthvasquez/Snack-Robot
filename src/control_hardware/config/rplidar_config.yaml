@@ -1,0 +1,11 @@
+rplidar_node:
+  ros__parameters:
+    use_sim_time: false
+    frame_id: RPLIDAR_Joined_1
+    scan_frequency: 10.0
+    channel_type: serial
+    serial_baudrate: 115200
+    serial_port: /dev/ttyUSB0
+    inverted: false
+    angle_compensate: true
+    scan_mode: Sensitivity

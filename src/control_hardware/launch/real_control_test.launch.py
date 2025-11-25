@@ -18,6 +18,7 @@ def generate_launch_description():
 
     rviz_file = os.path.join(get_package_share_directory('control_hardware'), 'rviz', 'snack_robot_viz.rviz')
     xacro_file = os.path.join(get_package_share_directory('control_hardware'), 'urdf', 'real_snack_robot.xacro')
+    rplidar_config = os.path.join(get_package_share_directory('control_hardware'), 'config', 'rplidar_config.yaml')
     robot_description = xacro.process_file(xacro_file).toxml()
 
     controller_yaml = PathJoinSubstitution(
@@ -55,6 +56,13 @@ def generate_launch_description():
                 'diff_drive_controller',
                 'imu_sensor_broadcaster'
                 ]
+        ),
+        Node(
+            package='rplidar_ros',
+            executable='rplidar_node',
+            name='rplidar_node',
+            output='screen',
+            parameters=[rplidar_config]
         ),
         Node(
             package='rviz2',
