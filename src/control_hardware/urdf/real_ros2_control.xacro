@@ -25,6 +25,7 @@
       <param name="en_pin">27</param>
       <param name="dir_pin">22</param>
       <param name="pulse_per_rev">1600</param>
+      <param name="direction_multiplier">1.0</param>
     </hardware>
     <joint name="Revolute_Left_Wheel">
       <state_interface name="position" />
@@ -40,6 +41,7 @@
       <param name="en_pin">5</param>
       <param name="dir_pin">6</param>
       <param name="pulse_per_rev">1600</param>
+      <param name="direction_multiplier">-1.0</param>
     </hardware>
     <joint name="Revolute_Right_Wheel">
       <state_interface name="position" />

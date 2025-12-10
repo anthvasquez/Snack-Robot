@@ -10,7 +10,7 @@ using namespace hardware_interface;
 
 static const rclcpp::Logger logger = rclcpp::get_logger("Stepper_Motor");
 const double wheel_radius = 0.0475;
-const double wheel_circumference = 2 * M_PI * wheel_radius;
+const double REV_RAD = 2 * M_PI;
 
 namespace control_hardware
 {
@@ -104,6 +104,11 @@ namespace control_hardware
             RCLCPP_FATAL(logger, "joint %s must specify an 'pulse_per_rev' param.", joint.name.c_str());
             return CallbackReturn::ERROR;
         }
+        if(info_.hardware_parameters["direction_multiplier"].empty())
+        {
+            RCLCPP_FATAL(logger, "joint %s must specify an 'direction_multiplier' param.", joint.name.c_str());
+            return CallbackReturn::ERROR;
+        }
 
         return CallbackReturn::SUCCESS;
     }
@@ -121,6 +126,7 @@ namespace control_hardware
             dir_pin = stoi(info_.hardware_parameters["dir_pin"]);
             en_pin = stoi(info_.hardware_parameters["en_pin"]);
             pulse_per_rev = stof(info_.hardware_parameters["pulse_per_rev"]);
+            direction_multiplier = stof(info_.hardware_parameters["direction_multiplier"]);
 
             handle = lgGpiochipOpen(0);
             if (handle < 0)
@@ -131,11 +137,12 @@ namespace control_hardware
         }
         catch (const invalid_argument &e)
         {
-            RCLCPP_INFO(logger, "en_pin: %s, pul_pin: %s, dir_pin: %s, pulse_per_rev: %s",
+            RCLCPP_INFO(logger, "en_pin: %s, pul_pin: %s, dir_pin: %s, pulse_per_rev: %s, direction_multiplier: %s",
                         info_.hardware_parameters["en_pin"].c_str(),
                         info_.hardware_parameters["pul_pin"].c_str(),
                         info_.hardware_parameters["dir_pin"].c_str(),
-                        info_.hardware_parameters["pulse_per_rev"].c_str()
+                        info_.hardware_parameters["pulse_per_rev"].c_str(),
+                        info_.hardware_parameters["direction_multiplier"].c_str()
                     );
             RCLCPP_FATAL(logger, "Could not parse one or more values from %s hardware parameters.", info_.name.c_str());
         }
@@ -218,10 +225,12 @@ namespace control_hardware
 
     return_type DM542_Stepper_ActuatorHardware::write(const rclcpp::Time &time, const rclcpp::Duration &period)
     {
-        auto revs_per_second = cmd_vel / wheel_circumference;
-        cmd_pulse_per_second = abs(revs_per_second * pulse_per_rev);
+        cmd_vel *= direction_multiplier;
+        auto revs_per_second = cmd_vel / REV_RAD;
+        auto command_freq = fabs(revs_per_second * pulse_per_rev);
 
-        if(lgGpioWrite(handle, dir_pin, cmd_vel < 0 ? 0 : 1) != 0)
+        auto direction = cmd_vel < 0.0 ? 0 : 1;
+        if(lgGpioWrite(handle, dir_pin, direction) != 0)
         {
             RCLCPP_ERROR(logger, "Could not write to 'dir_pin' for joint %s", info_.joints[0].name.c_str());
             return return_type::ERROR;
@@ -229,11 +238,11 @@ namespace control_hardware
         // The set pwm command only takes in frequency 0.1 <= value <= 10000 Hz
         // If the commanded value is below that range, set the duty cycle to 0
         // To prevent the robot from creeping forward when idle
-        auto command_freq = max(0.1f, min(cmd_pulse_per_second, 10000.0f));
+        cmd_pulse_per_second = max(0.1, min(command_freq, max_pulse_freq));
         auto duty = cmd_pulse_per_second < 0.1 ? 0 : 50;
-        if(lgTxPwm(handle, pul_pin, command_freq, duty, 0, 0) < 0)
+        if(lgTxPwm(handle, pul_pin, cmd_pulse_per_second, duty, 0, 0) < 0)
         {
-            RCLCPP_ERROR(logger, "Failed to create software pwm signal for 'pul_pin' (%d) with period (%f) on joint %s", pul_pin, cmd_pulse_per_second, info_.joints[0].name.c_str());
+            RCLCPP_ERROR(logger, "Failed setting PWM on 'pul_pin' (%d) with frequency (%f) on joint %s", pul_pin, cmd_pulse_per_second, info_.joints[0].name.c_str());
             return return_type::ERROR;
         }
 
@@ -242,11 +251,15 @@ namespace control_hardware
 
     return_type DM542_Stepper_ActuatorHardware::read(const rclcpp::Time &time, const rclcpp::Duration &period)
     {
-        // cmd_pulse_per_second = cmd_vel / wheel_circumference * pulse_per_rev;
+        auto wheel_direction = lgGpioRead(handle, dir_pin) ? 1 : -1;
         auto pulse_freq = cmd_pulse_per_second < 0.1f ? 0 : cmd_pulse_per_second;
-        pulse_freq *= cmd_vel < 0 ? -1 : 1;
-        state_velocity = (pulse_freq / pulse_per_rev) * wheel_circumference;
-        state_position += state_velocity * period.nanoseconds() / pow(10, 9);
+        auto rev_per_sec = pulse_freq / pulse_per_rev;
+        state_velocity = wheel_direction * rev_per_sec * REV_RAD;   // rad/s
+        if(state_velocity < 0 && cmd_vel > 0)
+        {
+            RCLCPP_WARN(logger, "Reporting state velocity (%.2f) with opposite sign of command velocity (%.2f)", state_velocity, cmd_vel);
+        }
+        state_position += state_velocity * period.nanoseconds() * 1e-9;
 
         return return_type::OK;
     }

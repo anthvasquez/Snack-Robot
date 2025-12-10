@@ -62,8 +62,9 @@ namespace control_hardware
         float cmd_pulse_per_second;
         int pul_pin, en_pin, dir_pin;
         int pulse_per_rev;
+        float direction_multiplier;
         int handle;
-        int max_pulse_freq = 5000;  // Hz
+        double max_pulse_freq = 5000.0;  // Hz
     };
 } // namespace control_hardware
 #endif // DM542_STEPPER_ACTUATORHARDWARE_HPP
