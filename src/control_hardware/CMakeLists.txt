@@ -92,11 +92,11 @@ endif()
 pluginlib_export_plugin_description_file(hardware_interface control_hardware.xml)
 
 install(DIRECTORY
-	launch
-	config
+  launch
+  config
   urdf
   rviz
-	DESTINATION share/${PROJECT_NAME}/
+  DESTINATION share/${PROJECT_NAME}/
 )
 
 ament_package()

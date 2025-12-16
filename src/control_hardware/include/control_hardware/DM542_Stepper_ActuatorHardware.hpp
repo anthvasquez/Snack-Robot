@@ -20,51 +20,51 @@
 
 namespace control_hardware
 {
-    class DM542_Stepper_ActuatorHardware : public hardware_interface::ActuatorInterface
-    {
-    public:
-        RCLCPP_SHARED_PTR_DEFINITIONS(DM542_Stepper_ActuatorHardware)
+class DM542_Stepper_ActuatorHardware : public hardware_interface::ActuatorInterface
+{
+public:
+RCLCPP_SHARED_PTR_DEFINITIONS(DM542_Stepper_ActuatorHardware)
 
-        SNACK_ROBOT_PUBLIC
-        std::vector<hardware_interface::StateInterface> export_state_interfaces() override;
+SNACK_ROBOT_PUBLIC
+std::vector<hardware_interface::StateInterface> export_state_interfaces() override;
 
-        SNACK_ROBOT_PUBLIC
-        std::vector<hardware_interface::CommandInterface> export_command_interfaces() override;
+SNACK_ROBOT_PUBLIC
+std::vector<hardware_interface::CommandInterface> export_command_interfaces() override;
 
-        SNACK_ROBOT_PUBLIC
-        hardware_interface::CallbackReturn on_init(const hardware_interface::HardwareInfo &info) override;
+SNACK_ROBOT_PUBLIC
+hardware_interface::CallbackReturn on_init(const hardware_interface::HardwareInfo &info) override;
 
-        SNACK_ROBOT_PUBLIC
-        hardware_interface::CallbackReturn on_configure(const rclcpp_lifecycle::State &previous_state) override;
+SNACK_ROBOT_PUBLIC
+hardware_interface::CallbackReturn on_configure(const rclcpp_lifecycle::State &previous_state) override;
 
-        SNACK_ROBOT_PUBLIC
-        hardware_interface::CallbackReturn on_activate(const rclcpp_lifecycle::State &previous_state) override;
+SNACK_ROBOT_PUBLIC
+hardware_interface::CallbackReturn on_activate(const rclcpp_lifecycle::State &previous_state) override;
 
-        SNACK_ROBOT_PUBLIC
-        hardware_interface::CallbackReturn on_deactivate(const rclcpp_lifecycle::State &previous_state) override;
+SNACK_ROBOT_PUBLIC
+hardware_interface::CallbackReturn on_deactivate(const rclcpp_lifecycle::State &previous_state) override;
 
-        SNACK_ROBOT_PUBLIC
-        hardware_interface::CallbackReturn on_cleanup(const rclcpp_lifecycle::State &previous_state) override;
+SNACK_ROBOT_PUBLIC
+hardware_interface::CallbackReturn on_cleanup(const rclcpp_lifecycle::State &previous_state) override;
 
-        SNACK_ROBOT_PUBLIC
-        hardware_interface::CallbackReturn on_shutdown(const rclcpp_lifecycle::State &previous_state) override;
+SNACK_ROBOT_PUBLIC
+hardware_interface::CallbackReturn on_shutdown(const rclcpp_lifecycle::State &previous_state) override;
 
-        SNACK_ROBOT_PUBLIC
-        hardware_interface::return_type read(const rclcpp::Time &time, const rclcpp::Duration &period) override;
+SNACK_ROBOT_PUBLIC
+hardware_interface::return_type read(const rclcpp::Time &time, const rclcpp::Duration &period) override;
 
-        SNACK_ROBOT_PUBLIC
-        hardware_interface::return_type write(const rclcpp::Time &time, const rclcpp::Duration &period) override;
+SNACK_ROBOT_PUBLIC
+hardware_interface::return_type write(const rclcpp::Time &time, const rclcpp::Duration &period) override;
 
-    private:
-        double state_position;  //position of shaft out of # of pulses per revolution
-        double state_velocity;  // m/s
-        double cmd_vel;         // m/s
-        float cmd_pulse_per_second;
-        int pul_pin, en_pin, dir_pin;
-        int pulse_per_rev;
-        float direction_multiplier;
-        int handle;
-        double max_pulse_freq = 5000.0;  // Hz
-    };
+private:
+double state_position;          //position of shaft out of # of pulses per revolution
+double state_velocity;          // m/s
+double cmd_vel;                 // m/s
+float cmd_pulse_per_second;
+int pul_pin, en_pin, dir_pin;
+int pulse_per_rev;
+float direction_multiplier;
+int handle;
+double max_pulse_freq = 5000.0;          // Hz
+};
 } // namespace control_hardware
 #endif // DM542_STEPPER_ACTUATORHARDWARE_HPP
