@@ -2,17 +2,15 @@ from launch import LaunchDescription
 from launch.actions import IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from ament_index_python.packages import get_package_share_directory
-from launch_ros.substitutions import FindPackageShare
 import os
- 
+
+
 def generate_launch_description():
     models_pkg = 'my_3d_models'
     pkg_gazebo_ros = get_package_share_directory('ros_ign_gazebo')
 
     world = os.path.join(get_package_share_directory(models_pkg),
-                          'worlds', 'apartment.sdf')
-    pkg_models = get_package_share_directory(models_pkg)
-    gazebo_models_path = os.path.join(pkg_models, 'models')
+                         'worlds', 'apartment.sdf')
 
     return LaunchDescription([
          IncludeLaunchDescription(

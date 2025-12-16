@@ -17,7 +17,8 @@ import os
 from ament_index_python.packages import get_package_share_directory
 
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, ExecuteProcess, IncludeLaunchDescription
+from launch.actions import DeclareLaunchArgument, ExecuteProcess
+from launch.actions import IncludeLaunchDescription
 from launch.actions import RegisterEventHandler
 from launch.event_handlers import OnProcessExit
 from launch.launch_description_sources import PythonLaunchDescriptionSource
@@ -32,10 +33,8 @@ def generate_launch_description():
     # Launch Arguments
     use_sim_time = LaunchConfiguration('use_sim_time', default=True)
 
-    ignition_ros2_control_demos_path = os.path.join(
-        get_package_share_directory('ign_ros2_control_demos'))
-
-    xacro_file = os.path.join(get_package_share_directory('control_hardware'), 'urdf', 'ignition_ros2_control.xacro')
+    xacro_file = os.path.join(get_package_share_directory('control_hardware'),
+                              'urdf', 'ignition_ros2_control.xacro')
 
     doc = xacro.parse(open(xacro_file))
     xacro.process_doc(doc)

@@ -8,8 +8,12 @@ from ament_index_python import get_package_share_directory
 import xacro
 import os
 
+
 def generate_launch_description():
-    xacro_filepath = os.path.join(get_package_share_directory('control_hardware'), 'urdf', 'classic_ros2_control.xacro')
+    xacro_filepath = os.path.join(
+        get_package_share_directory('control_hardware'),
+        'urdf',
+        'classic_ros2_control.xacro')
     robot_description = xacro.process_file(xacro_filepath).toxml()
 
     # Launch Gazebo
@@ -46,7 +50,7 @@ def generate_launch_description():
     #     ],
     #     output='screen'
     # )
-    
+  
     joint_state_broadcaster = Node(
         package='controller_manager',
         executable='spawner',
@@ -58,7 +62,8 @@ def generate_launch_description():
         package='controller_manager',
         executable='spawner',
         output='screen',
-        arguments=['diff_drive_controller', "--ros-args", "-r", "/diff_drive_controller/cmd_vel:=/cmd_vel"]
+        arguments=['diff_drive_controller', "--ros-args", "-r",
+                   "/diff_drive_controller/cmd_vel:=/cmd_vel"]
     )
 
     delayed_joint_state_broadcaster = RegisterEventHandler(

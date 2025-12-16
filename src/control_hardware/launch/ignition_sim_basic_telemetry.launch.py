@@ -1,5 +1,6 @@
 from launch import LaunchDescription
-from launch.actions import RegisterEventHandler, IncludeLaunchDescription, DeclareLaunchArgument
+from launch.actions import RegisterEventHandler, IncludeLaunchDescription
+from launch.actions import DeclareLaunchArgument
 from launch.event_handlers import OnProcessExit
 from launch.substitutions import PathJoinSubstitution, LaunchConfiguration
 from launch.launch_description_sources import PythonLaunchDescriptionSource
@@ -8,11 +9,15 @@ from ament_index_python import get_package_share_directory
 import xacro
 import os
 
+
 def generate_launch_description():
-    xacro_filepath = os.path.join(get_package_share_directory('control_hardware'), 'urdf', 'sim_snack_robot.xacro')
+    xacro_filepath = os.path.join(
+        get_package_share_directory('control_hardware'),
+        'urdf',
+        'sim_snack_robot.xacro')
     robot_description = xacro.process_file(xacro_filepath).toxml()
     world = os.path.join(get_package_share_directory('my_3d_models'),
-                          'worlds', 'apartment.sdf')
+                         'worlds', 'apartment.sdf')
 
     use_sim_time = LaunchConfiguration('use_sim_time', default=True)
 
@@ -42,7 +47,7 @@ def generate_launch_description():
                    '-Y', '-1.57',
                    '-allow_renaming', 'true'],
     )
-    
+ 
     joint_state_broadcaster = Node(
         package='controller_manager',
         executable='spawner',
@@ -54,7 +59,8 @@ def generate_launch_description():
         package='controller_manager',
         executable='spawner',
         output='screen',
-        arguments=['diff_drive_controller', "--ros-args", "-r", "/diff_drive_controller/cmd_vel:=/cmd_vel"]
+        arguments=['diff_drive_controller', "--ros-args", "-r",
+                   "/diff_drive_controller/cmd_vel:=/cmd_vel"]
     )
 
     return LaunchDescription([
@@ -68,13 +74,15 @@ def generate_launch_description():
             executable='robot_state_publisher',
             name='robot_state_publisher',
             output='screen',
-            parameters=[{'robot_description': robot_description, 'use_sim_time': use_sim_time}]
+            parameters=[{'robot_description': robot_description,
+                         'use_sim_time': use_sim_time}]
             ),
         Node(
             package='ros_gz_bridge',
             executable='parameter_bridge',
             arguments=['/clock@rosgraph_msgs/msg/Clock[ignition.msgs.Clock',
-                       '/scan@sensor_msgs/msg/LaserScan[ignition.msgs.LaserScan',
+                       '/scan@' +
+                       'sensor_msgs/msg/LaserScan[ignition.msgs.LaserScan',
                        '/imu@sensor_msgs/msg/Imu[ignition.msgs.IMU'],
             output='screen'
         ),
@@ -82,14 +90,14 @@ def generate_launch_description():
         ignition_spawn_entity,
         RegisterEventHandler(
             event_handler=OnProcessExit(
-            target_action=ignition_spawn_entity,
-            on_exit=[joint_state_broadcaster]
+                target_action=ignition_spawn_entity,
+                on_exit=[joint_state_broadcaster]
             )
         ),
         RegisterEventHandler(
             event_handler=OnProcessExit(
-            target_action=joint_state_broadcaster,
-            on_exit=[diff_drive_controller]
+                target_action=joint_state_broadcaster,
+                on_exit=[diff_drive_controller]
             )
         )
     ])
