@@ -13,6 +13,7 @@
   <depend>rclpy</depend>
   <depend>ros2_control</depend>
   <depend>ros2_controllers</depend>
+  <depend>dynamixel_hardware_interface</depend>
   <depend>xacro</depend>
   <depend>ros_gz_sim</depend>
   <depend>ros_gz_interfaces</depend>
