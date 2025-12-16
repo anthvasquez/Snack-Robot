@@ -1,18 +1,20 @@
-import rclpy
 from launch import LaunchDescription
 from launch_ros.actions import Node
 from ament_index_python import get_package_share_directory
 import os
 
+
 def generate_launch_description():
-    config_folder = os.path.join(get_package_share_directory('path_planning'), 'config')
+    config_folder = os.path.join(
+        get_package_share_directory('path_planning'), 'config')
     planner_yaml = os.path.join(config_folder, 'planner_server.yaml')
     controller_yaml = os.path.join(config_folder, 'controller_server.yaml')
     bt_navigator_yaml = os.path.join(config_folder, 'bt_navigator.yaml')
     recovery_yaml = os.path.join(config_folder, 'recovery.yaml')
     local_costmap_yaml = os.path.join(config_folder, 'local_costmap.yaml')
     global_costmap_yaml = os.path.join(config_folder, 'global_costmap.yaml')
-    behaviors_xml = os.path.join(get_package_share_directory('path_planning'), 'config', 'behavior.xml')
+    behaviors_xml = os.path.join(
+        get_package_share_directory('path_planning'), 'config', 'behavior.xml')
 
     return LaunchDescription([
         Node(
@@ -50,7 +52,8 @@ def generate_launch_description():
             executable='bt_navigator',
             name='bt_navigator',
             output='screen',
-            parameters=[bt_navigator_yaml, {'default_nav_to_pose_bt_xml': behaviors_xml}]
+            parameters=[bt_navigator_yaml,
+                        {'default_nav_to_pose_bt_xml': behaviors_xml}]
         ),
         Node(
             package='nav2_behaviors',

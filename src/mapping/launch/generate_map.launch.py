@@ -11,8 +11,9 @@ def generate_launch_description():
     cartographer_dir = os.path.join(
         get_package_share_directory('mapping'), 'config')
     cartographer_basename = 'cartographer.lua'
-    rviz_config = os.path.join(get_package_share_directory('mapping'), 'rviz', 'generate_map.rviz')
-    
+    rviz_config = os.path.join(
+        get_package_share_directory('mapping'), 'rviz', 'generate_map.rviz')
+
     control_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([
             PathJoinSubstitution([

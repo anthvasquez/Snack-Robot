@@ -15,14 +15,16 @@ def generate_launch_description():
         "robot_localization_config.yaml",
     )
     amcl_config = os.path.join(
-        get_package_share_directory("localization"), "config", "amcl_config.yaml"
+        get_package_share_directory("localization"),
+        "config", "amcl_config.yaml"
     )
     map_desc = os.path.join(
         get_package_share_directory("mapping"), "maps", "apartment_map2.yaml"
     )
 
     rviz_config = os.path.join(
-        get_package_share_directory("localization"), "rviz", "localization.rviz"
+        get_package_share_directory("localization"), "rviz",
+        "localization.rviz"
     )
 
     gui = LaunchConfiguration("gui", default=True)
@@ -69,7 +71,8 @@ def generate_launch_description():
                 executable="map_server",
                 name="map_server",
                 output="screen",
-                parameters=[{"use_sim_time": True}, {"yaml_filename": map_desc}],
+                parameters=[{"use_sim_time": True},
+                            {"yaml_filename": map_desc}],
             ),
             Node(
                 package="nav2_lifecycle_manager",

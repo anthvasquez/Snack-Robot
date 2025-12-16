@@ -47,7 +47,7 @@ def generate_launch_description():
                    '-Y', '-1.57',
                    '-allow_renaming', 'true'],
     )
- 
+
     joint_state_broadcaster = Node(
         package='controller_manager',
         executable='spawner',
