@@ -7,8 +7,8 @@ controller_manager:
     diff_drive_controller:
       type: diff_drive_controller/DiffDriveController
     
-    imu_sensor_broadcaster:
-      type: imu_sensor_broadcaster/IMUSensorBroadcaster
+    # imu_sensor_broadcaster:
+    #   type: imu_sensor_broadcaster/IMUSensorBroadcaster
 
 
 diff_drive_controller:
@@ -18,20 +18,22 @@ diff_drive_controller:
     right_wheel_names: ["Revolute_Right_Wheel"]
     wheel_separation: 0.173
     wheel_radius: 0.0475
-    #right_wheel_radius_multiplier: -1.0  # give opposite direction commands to right motor
     base_frame_id: "base_link"
     enable_odom_tf: true
-    cmd_vel_timeout: 5.0
+    cmd_vel_timeout: 0.5
     pose_covariance_diagonal: [0.001, 0.001, 0.001, 0.001, 0.001, 0.01]
     twist_covariance_diagonal: [0.001, 0.001, 0.001, 0.001, 0.001, 0.01]
     position_feedback: true
-    open_loop: true
+    open_loop: false
     publish_limited_velocity: true
     linear.x.has_velocity_limits: true
-    linear.x.max_velocity: 0.9326603190344698676685972544111 # Max forward velocity in m/s
-    #     5kHz              1600
-    # (max_pulse_freq / pulse_per_rev) = revs_per_second
-    # revs_per_second * 2*pi*wheel_radius = max_forward_velocity
+    angular.z.has_velocity_limits: true
+    linear.x.max_velocity: 0.15 # Max forward velocity in m/s
+    angular.z.max_velocity: 1.755 # Max angular velocity based on formula below in rad/s
+    # 60.69 rev/min motor max velocity
+    # revs_per_second * 2*pi*wheel_radius = max_forward_velocity = 0.30188349206507720676697155930779
+    # w <= 2 * (wheelMax - linearVMax) / wheel_separation
+    # w <= 3.4899825672263260897915787203213 - 11.560693641618497109826589595376 * linearVMax
 
 imu_sensor_broadcaster:
   ros__parameters:
