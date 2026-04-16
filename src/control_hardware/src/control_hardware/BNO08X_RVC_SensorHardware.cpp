@@ -50,6 +50,7 @@ namespace control_hardware
 
   hardware_interface::CallbackReturn BNO08X_RVC_SensorHardware::on_cleanup(const rclcpp_lifecycle::State &previous_state)
   {
+    (void) previous_state;
     return CallbackReturn::SUCCESS;
   }
 
@@ -59,6 +60,7 @@ namespace control_hardware
 
   hardware_interface::CallbackReturn BNO08X_RVC_SensorHardware::on_configure(const rclcpp_lifecycle::State &previous_state)
   {
+    (void) previous_state;
     uart_fd = lgSerialOpen(SERIAL_DEVICE, 115200, 0);
     if (uart_fd < 0)
     {
@@ -71,6 +73,7 @@ namespace control_hardware
 
   hardware_interface::CallbackReturn BNO08X_RVC_SensorHardware::on_shutdown(const rclcpp_lifecycle::State &previous_state)
   {
+    (void) previous_state;
     auto success = lgSerialClose(uart_fd);
     if (success < 0)
     {
@@ -86,6 +89,7 @@ namespace control_hardware
 
   hardware_interface::CallbackReturn BNO08X_RVC_SensorHardware::on_activate(const rclcpp_lifecycle::State &previous_state)
   {
+    (void) previous_state;
     imu = sensor_msgs::msg::Imu(); // reset imu message values to zeros
     tcflush(uart_fd, TCIOFLUSH);   // flush any stale data from the buffer
     // This IMU doesn't report angular velocity info, so tell programs to ignore this field
@@ -96,6 +100,7 @@ namespace control_hardware
 
   hardware_interface::CallbackReturn BNO08X_RVC_SensorHardware::on_deactivate(const rclcpp_lifecycle::State &previous_state)
   {
+    (void) previous_state;
     return CallbackReturn::SUCCESS;
   }
 
@@ -120,6 +125,8 @@ namespace control_hardware
 
   hardware_interface::return_type BNO08X_RVC_SensorHardware::read(const rclcpp::Time &time, const rclcpp::Duration &period)
   {
+    (void) time;
+    (void) period;
     auto dataAvailable = lgSerialDataAvailable(uart_fd);
     if (dataAvailable >= READING_SIZE)
     {

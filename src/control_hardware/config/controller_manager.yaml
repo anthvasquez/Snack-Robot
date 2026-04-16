@@ -35,7 +35,7 @@ diff_drive_controller:
     # w <= 2 * (wheelMax - linearVMax) / wheel_separation
     # w <= 3.4899825672263260897915787203213 - 11.560693641618497109826589595376 * linearVMax
 
-imu_sensor_broadcaster:
-  ros__parameters:
-    sensor_name: "BNO08X"
-    frame_id: "imu_link"
+# imu_sensor_broadcaster:
+#   ros__parameters:
+#     sensor_name: "BNO08X"
+#     frame_id: "imu_link"

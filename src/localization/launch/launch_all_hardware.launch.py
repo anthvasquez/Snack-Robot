@@ -8,7 +8,6 @@ from ament_index_python import get_package_share_directory
 import xacro
 import os
 
-
 def generate_launch_description():
     gui_declaration = DeclareLaunchArgument(
         'gui',
@@ -30,7 +29,13 @@ def generate_launch_description():
             'controller_manager.yaml'
         ]
     )
-
+    imu_config = os.path.join(
+        get_package_share_directory('localization'),
+        'config', 'bno08x_config.yaml')
+    rplidar_config = os.path.join(
+        get_package_share_directory('localization'),
+        'config', 'rplidar_config.yaml')
+    
     return LaunchDescription([
         gui_declaration,
         Node(
@@ -64,5 +69,20 @@ def generate_launch_description():
             output='screen',
             arguments=['-d', rviz_file],
             condition=IfCondition(gui)
+        ),
+        Node(
+            package='bno08x_driver',  
+            executable='bno08x_driver',  
+            name='bno08x_driver',
+            output='screen',
+            parameters=[imu_config],
+            remappings=[("imu", "imu/data"), ("magnetic_field","imu/mag")]
+        ),
+        Node(
+            package='rplidar_ros',
+            executable='rplidar_node',
+            name='rplidar_node',
+            output='screen',
+            parameters=[rplidar_config]
         )
     ])
